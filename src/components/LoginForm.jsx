@@ -1,20 +1,35 @@
 import { useState } from "react";
 
-const LoginForm = () => {
+// services
+import loginService from "../services/loginService";
+import blogs from "../services/blogs";
+
+const LoginForm = ({ setUser }) => {
 	// states
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 
 	// functions
-	const handleFormSubmit = (e) => {
+	const handleFormSubmit = async (e) => {
 		e.preventDefault();
 		const formData = new FormData(e.target);
 		const username = formData.get("username");
 		const password = formData.get("password");
 
 		// here we have to make the post to the backend and see if the user exists
-		console.log("Username:", username);
-		console.log("Password:", password);
+		const { status, data } = await loginService.login({
+			username: username,
+			password: password,
+		});
+
+		console.log(user);
+
+		if (status && status === 401) {
+			console.log("error logging into the backend");
+		} else {
+			setUser(data);
+			blogs.setToken(data.token);
+		}
 	};
 	return (
 		<div>

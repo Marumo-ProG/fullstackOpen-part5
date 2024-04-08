@@ -25,7 +25,7 @@ const App = () => {
 				</>
 			) : (
 				<>
-					<LoginForm />
+					<LoginForm setuser={setUser} />
 				</>
 			)}
 		</div>
