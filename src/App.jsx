@@ -10,6 +10,17 @@ const App = () => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
 
+  const handleLogout = () => {
+    // removing the token from the local storage
+    window.localStorage.removeItem("blogListUser");
+
+    // changing the token from blogs service
+    blogService.setToken(null);
+
+    // changing the user
+    setUser(null);
+  };
+
   return (
     <div>
       <h1 style={{ color: "green" }}>Welcome to my Bloglist Application :-)</h1>
@@ -18,7 +29,8 @@ const App = () => {
           <h2>blogs</h2>
           <br />
           <h3>
-            {user.name} has logged in <button>logout</button>
+            {user.name} has logged in{" "}
+            <button onClick={handleLogout}>logout</button>
           </h3>
           <u>
             {blogs.map((blog) => (
