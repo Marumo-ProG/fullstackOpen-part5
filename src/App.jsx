@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import blogService from "./services/blogs";
+
+// Components
+import CreateBlogForm from "./components/createBlogForm";
 import LoginForm from "./components/LoginForm";
 
 const App = () => {
@@ -32,6 +35,8 @@ const App = () => {
             {user.name} has logged in{" "}
             <button onClick={handleLogout}>logout</button>
           </h3>
+          <CreateBlogForm />
+          <br />
           <u>
             {blogs.map((blog) => (
               <li key={blog.id}>
