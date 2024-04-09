@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import LoginForm from "./components/LoginForm";
 
@@ -17,9 +16,17 @@ const App = () => {
       {user ? (
         <>
           <h2>blogs</h2>
-          {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
-          ))}
+          <br />
+          <h3>
+            {user.name} has logged in <button>logout</button>
+          </h3>
+          <u>
+            {blogs.map((blog) => (
+              <li key={blog.id}>
+                {blog.title} {blog.author}
+              </li>
+            ))}
+          </u>
         </>
       ) : (
         <>

@@ -1,13 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // services
 import loginService from "../services/loginService";
 import blogs from "../services/blogs";
 
+// // Configs
+// import { setToken } from "../services/blogs";
+
 const LoginForm = ({ setUser }) => {
   // states
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    // checking if the user information is still in the state
+    const user = window.localStorage.getItem("blogListUser");
+    if (user) {
+      setUser(JSON.parse(user));
+      blogs.setToken(JSON.parse(user).token); // set the token
+    }
+  }, []);
 
   // functions
   const handleFormSubmit = async (e) => {
@@ -26,9 +38,15 @@ const LoginForm = ({ setUser }) => {
       // set the user
       setUser(user);
 
+      // set the token when the user logs in
+      blogs.setToken(user.token);
+
       // clear the form
       setPassword("");
       setUsername("");
+
+      // store the user information in the local storage
+      window.localStorage.setItem("blogListUser", JSON.stringify(user));
     } catch (error) {
       console.log("error loggin in", error);
       alert("Wrong password or username");
@@ -44,6 +62,7 @@ const LoginForm = ({ setUser }) => {
             name="username"
             type="text"
             id="username"
+            value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
@@ -53,6 +72,7 @@ const LoginForm = ({ setUser }) => {
             name={"password"}
             type="password"
             id="password"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
