@@ -7,7 +7,7 @@ import blogs from "../services/blogs";
 // // Configs
 // import { setToken } from "../services/blogs";
 
-const LoginForm = ({ setUser }) => {
+const LoginForm = ({ setUser, setNotification }) => {
   // states
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -47,9 +47,12 @@ const LoginForm = ({ setUser }) => {
 
       // store the user information in the local storage
       window.localStorage.setItem("blogListUser", JSON.stringify(user));
+
+      // setting the notification message
+      setNotification({ message: "Logged in as " + user.name, color: "green" });
     } catch (error) {
       console.log("error loggin in", error);
-      alert("Wrong password or username");
+      setNotification({ message: "Wrong password or username", color: "red" });
     }
   };
   return (

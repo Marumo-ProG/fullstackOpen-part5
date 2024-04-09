@@ -3,7 +3,7 @@ import { useState } from "react";
 // services
 import blogService from "../services/blogs";
 
-const CreateBlogForm = () => {
+const CreateBlogForm = ({ setNotification }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
@@ -25,8 +25,9 @@ const CreateBlogForm = () => {
         author: author,
         url: url,
       });
+      setNotification({ message: "Blog created!", color: "green" });
     } catch (error) {
-      console.log("error creating a blog", error);
+      setNotification({ mesasge: "Error creating the blog!", color: "red" });
       alert("blog creation error");
     }
   };

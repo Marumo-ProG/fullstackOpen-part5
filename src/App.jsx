@@ -4,10 +4,12 @@ import blogService from "./services/blogs";
 // Components
 import CreateBlogForm from "./components/createBlogForm";
 import LoginForm from "./components/LoginForm";
+import NotificationMessage from "./components/NotificationMessage";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -27,6 +29,8 @@ const App = () => {
   return (
     <div>
       <h1 style={{ color: "green" }}>Welcome to my Bloglist Application :-)</h1>
+      {notification && <NotificationMessage notification={notification} />}
+
       {user ? (
         <>
           <h2>blogs</h2>
@@ -35,7 +39,7 @@ const App = () => {
             {user.name} has logged in{" "}
             <button onClick={handleLogout}>logout</button>
           </h3>
-          <CreateBlogForm />
+          <CreateBlogForm setNotification={setNotification} />
           <br />
           <u>
             {blogs.map((blog) => (
@@ -47,7 +51,7 @@ const App = () => {
         </>
       ) : (
         <>
-          <LoginForm setUser={setUser} />
+          <LoginForm setUser={setUser} setNotification={setNotification} />
         </>
       )}
     </div>
