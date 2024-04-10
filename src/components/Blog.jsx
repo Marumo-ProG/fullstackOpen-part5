@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import blogsService from "../services/blogs";
 import usersService from "../services/users";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, loggedUser }) => {
 	const [showBlogInfo, setShowBlogInfo] = useState(false);
 	const [user, setUser] = useState(null);
 
@@ -21,6 +21,19 @@ const Blog = ({ blog }) => {
 			}
 		} catch (error) {
 			alert("Error getting user");
+		}
+	};
+
+	const handleOnRemove = async () => {
+		try {
+			if (
+				window.confirm("Are you sure you want to remove " + blog.title)
+			) {
+				await blogsService.deleteBlog(blog.id);
+			}
+		} catch (error) {
+			alert("error deleting a blog post");
+			console.log("error removing a blog");
 		}
 	};
 
@@ -57,6 +70,15 @@ const Blog = ({ blog }) => {
 						<button onClick={handleLiking}>like</button>
 					</p>
 					<p>{user && user.name}</p>
+					<br />
+					{user.username === loggedUser.username && (
+						<button
+							onClick={handleOnRemove}
+							style={{ color: "white", backgroundColor: "red" }}
+						>
+							remove
+						</button>
+					)}
 				</div>
 			)}
 		</div>
