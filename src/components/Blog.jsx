@@ -1,10 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // services
 import blogsService from "../services/blogs";
+import usersService from "../services/users";
 
 const Blog = ({ blog }) => {
 	const [showBlogInfo, setShowBlogInfo] = useState(false);
+	const [user, setUser] = useState(null);
+
+	// fetching the user information who created the post
+	useEffect(() => {
+		fetchUser();
+	}, []);
+
+	const fetchUser = async () => {
+		try {
+			const user = await usersService.getUser(blog.user);
+			setUser(user);
+		} catch (error) {
+			// alert("Error getting user");
+		}
+	};
 
 	const handleLiking = async () => {
 		// increase the blog likes by 1
@@ -38,7 +54,7 @@ const Blog = ({ blog }) => {
 						{blog.likes}{" "}
 						<button onClick={handleLiking}>like</button>
 					</p>
-					<p>{blog.author}</p>
+					<p>{user}</p>
 				</div>
 			)}
 		</div>
