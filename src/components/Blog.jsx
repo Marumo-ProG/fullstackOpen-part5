@@ -15,10 +15,12 @@ const Blog = ({ blog }) => {
 
 	const fetchUser = async () => {
 		try {
-			const user = await usersService.getUser(blog.user);
-			setUser(user);
+			if (blog.user) {
+				const user = await usersService.getUser(blog.user);
+				setUser(user);
+			}
 		} catch (error) {
-			// alert("Error getting user");
+			alert("Error getting user");
 		}
 	};
 
@@ -54,7 +56,7 @@ const Blog = ({ blog }) => {
 						{blog.likes}{" "}
 						<button onClick={handleLiking}>like</button>
 					</p>
-					<p>{user}</p>
+					<p>{user.name}</p>
 				</div>
 			)}
 		</div>
