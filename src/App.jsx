@@ -5,6 +5,7 @@ import blogService from "./services/blogs";
 import CreateBlogForm from "./components/createBlogForm";
 import LoginForm from "./components/LoginForm";
 import NotificationMessage from "./components/NotificationMessage";
+import Blog from "./components/Blog";
 
 const App = () => {
 	const [blogs, setBlogs] = useState([]);
@@ -55,9 +56,7 @@ const App = () => {
 					<br />
 					<u>
 						{blogs.map((blog) => (
-							<li key={blog.id}>
-								{blog.title} {blog.author}
-							</li>
+							<Blog blog={blog} key={blog.id} />
 						))}
 					</u>
 				</>
