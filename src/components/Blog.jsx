@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
 
+import PropTypes from "prop-types";
+
 // services
 import blogsService from "../services/blogs";
 import usersService from "../services/users";
 
 const Blog = ({ blog, loggedUser }) => {
+	Blog.prototype = {
+		blog: PropTypes.object.isRequired,
+	};
 	const [showBlogInfo, setShowBlogInfo] = useState(false);
 	const [user, setUser] = useState(null);
 
