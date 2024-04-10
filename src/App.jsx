@@ -14,7 +14,10 @@ const App = () => {
 	const [showBlogForm, setShowBlogForm] = useState(false);
 
 	useEffect(() => {
-		blogService.getAll().then((blogs) => setBlogs(blogs));
+		blogService.getAll().then((blogs) => {
+			let sortedBlogs = blogs.sort((a, b) => a.likes - b.likes);
+			setBlogs(sortedBlogs);
+		});
 	}, []);
 
 	const handleLogout = () => {
