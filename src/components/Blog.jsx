@@ -64,7 +64,10 @@ const Blog = ({ blog, loggedUser }) => {
 			}}
 		>
 			{blog.title} {blog.author}{" "}
-			<button onClick={() => setShowBlogInfo(!showBlogInfo)}>
+			<button
+				id="viewButton"
+				onClick={() => setShowBlogInfo(!showBlogInfo)}
+			>
 				{showBlogInfo ? "hide blog information" : "view"}
 			</button>
 			<br />
@@ -77,7 +80,7 @@ const Blog = ({ blog, loggedUser }) => {
 					</p>
 					<p>{user && user.name}</p>
 					<br />
-					{user.username === loggedUser.username && (
+					{loggedUser && user.username === loggedUser.username && (
 						<button
 							onClick={handleOnRemove}
 							style={{ color: "white", backgroundColor: "red" }}
