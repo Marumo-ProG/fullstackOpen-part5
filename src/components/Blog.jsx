@@ -76,7 +76,9 @@ const Blog = ({ blog, loggedUser }) => {
 					<p>{blog.url}</p>
 					<p>
 						{blog.likes}{" "}
-						<button onClick={handleLiking}>like</button>
+						<button id={"like"} onClick={handleLiking}>
+							like
+						</button>
 					</p>
 					<p>{user && user.name}</p>
 					<br />
