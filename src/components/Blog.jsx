@@ -56,6 +56,7 @@ const Blog = ({ blog, loggedUser }) => {
 	};
 	return (
 		<div
+			id="test1"
 			style={{
 				border: "2px solid black",
 				marginTop: "16px",
