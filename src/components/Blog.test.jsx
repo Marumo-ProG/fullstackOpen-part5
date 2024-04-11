@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Blog from "./Blog";
+import CreateBlogForm from "./createBlogForm";
 
 test("renders content", () => {
   const blog = {
@@ -33,7 +34,7 @@ test("blogs information is shown when the view button is clicked", async () => {
   // const mockHandler = vi.fn()
 
   const { container } = render(<Blog blog={blog} />);
-  screen.debug();
+  //   screen.debug();
 
   const div = container.querySelector("#test1");
   const viewButton = container.querySelector("#viewButton");
@@ -85,4 +86,32 @@ test("Like button handler clicked twice mock testing", async () => {
 
   // checking if the handler has been called twice
   expect(mockHandler.mock.calls).toHaveLength(2);
+});
+
+test("<CreateBlogForm /> updates parent state and calls onSubmit", async () => {
+  const createBlog = vi.fn();
+  const user = userEvent.setup();
+
+  const { container } = render(
+    <CreateBlogForm handleOnFormSubmit={createBlog} />
+  );
+
+  const title = container.getElementsByTagName("input")[0];
+  const author = container.getElementsByTagName("input")[1];
+  const url = container.getElementsByTagName("input")[2];
+
+  const sendButton = container.getElementsByTagName("button")[0];
+
+  await user.type(
+    title,
+    "What they never told me as a second year computer science students!"
+  );
+  await user.type(author, "Samuel230");
+  await user.type(url, "www.nick.org");
+
+  await user.click(sendButton);
+
+  console.log(createBlog.mock.calls);
+
+  expect(createBlog.mock.calls).toHaveLength(1);
 });

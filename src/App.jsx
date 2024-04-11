@@ -8,71 +8,91 @@ import NotificationMessage from "./components/NotificationMessage";
 import Blog from "./components/Blog";
 
 const App = () => {
-	const [blogs, setBlogs] = useState([]);
-	const [user, setUser] = useState(null);
-	const [notification, setNotification] = useState(null);
-	const [showBlogForm, setShowBlogForm] = useState(false);
+  const [blogs, setBlogs] = useState([]);
+  const [user, setUser] = useState(null);
+  const [notification, setNotification] = useState(null);
+  const [showBlogForm, setShowBlogForm] = useState(false);
 
-	useEffect(() => {
-		blogService.getAll().then((blogs) => {
-			let sortedBlogs = blogs.sort((a, b) => a.likes - b.likes);
-			setBlogs(sortedBlogs);
-		});
-	}, []);
+  useEffect(() => {
+    blogService.getAll().then((blogs) => {
+      let sortedBlogs = blogs.sort((a, b) => a.likes - b.likes);
+      setBlogs(sortedBlogs);
+    });
+  }, []);
 
-	const handleLogout = () => {
-		// removing the token from the local storage
-		window.localStorage.removeItem("blogListUser");
+  const handleLogout = () => {
+    // removing the token from the local storage
+    window.localStorage.removeItem("blogListUser");
 
-		// changing the token from blogs service
-		blogService.setToken(null);
+    // changing the token from blogs service
+    blogService.setToken(null);
 
-		// changing the user
-		setUser(null);
-	};
+    // changing the user
+    setUser(null);
+  };
 
-	return (
-		<div>
-			<h1 style={{ color: "green" }}>
-				Welcome to my Bloglist Application :-)
-			</h1>
-			{notification && (
-				<NotificationMessage notification={notification} />
-			)}
+  // functions here
+  const handleOnFormSubmit = async (e) => {
+    e.preventDefault();
 
-			{user ? (
-				<>
-					<h2>blogs</h2>
-					<br />
-					<h3>
-						{user.name} has logged in{" "}
-						<button onClick={handleLogout}>logout</button>
-					</h3>
-					{showBlogForm && (
-						<CreateBlogForm setNotification={setNotification} />
-					)}
-					<br />
-					<button onClick={() => setShowBlogForm(!showBlogForm)}>
-						{showBlogForm ? "cancel" : "create new blog"}
-					</button>
+    // getting the values of the form from the form
+    const formData = new FormData(e.target);
+    const title = formData.get("title");
+    const author = formData.get("author");
+    const url = formData.get("url");
 
-					<br />
-					<u>
-						{blogs.map((blog) => (
-							<Blog blog={blog} key={blog.id} loggedUser={user} />
-						))}
-					</u>
-				</>
-			) : (
-				<>
-					<LoginForm
-						setUser={setUser}
-						setNotification={setNotification}
-					/>
-				</>
-			)}
-		</div>
-	);
+    // posting the data to the service to create a new blog
+    try {
+      await blogService.create({
+        title: title,
+        author: author,
+        url: url,
+      });
+      setNotification({ message: "Blog created!", color: "green" });
+    } catch (error) {
+      setNotification({ mesasge: "Error creating the blog!", color: "red" });
+      alert("blog creation error");
+    }
+  };
+
+  return (
+    <div>
+      <h1 style={{ color: "green" }}>Welcome to my Bloglist Application :-)</h1>
+      {notification && <NotificationMessage notification={notification} />}
+
+      {user ? (
+        <>
+          <h2>blogs</h2>
+          <br />
+          <h3>
+            {user.name} has logged in{" "}
+            <button onClick={handleLogout}>logout</button>
+          </h3>
+          {showBlogForm && (
+            <CreateBlogForm
+              setNotification={setNotification}
+              handleOnFormSubmit={handleOnFormSubmit}
+            />
+          )}
+          <br />
+          <button onClick={() => setShowBlogForm(!showBlogForm)}>
+            {showBlogForm ? "cancel" : "create new blog"}
+          </button>
+
+          <br />
+          <u>
+            {blogs.map((blog) => (
+              <Blog blog={blog} key={blog.id} loggedUser={user} />
+            ))}
+          </u>
+        </>
+      ) : (
+        <>
+          <LoginForm setUser={setUser} setNotification={setNotification} />
+        </>
+      )}
+    </div>
+  );
 };
 
 export default App;

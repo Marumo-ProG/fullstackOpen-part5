@@ -3,38 +3,15 @@ import { useState } from "react";
 // services
 import blogService from "../services/blogs";
 
-const CreateBlogForm = ({ setNotification }) => {
+const CreateBlogForm = ({ setNotification, handleOnFormSubmit }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
-  // functions here
-  const handleOnFormSubmit = async (e) => {
-    e.preventDefault();
-
-    // getting the values of the form from the form
-    const formData = new FormData(e.target);
-    const title = formData.get("title");
-    const author = formData.get("author");
-    const url = formData.get("url");
-
-    // posting the data to the service to create a new blog
-    try {
-      await blogService.create({
-        title: title,
-        author: author,
-        url: url,
-      });
-      setNotification({ message: "Blog created!", color: "green" });
-    } catch (error) {
-      setNotification({ mesasge: "Error creating the blog!", color: "red" });
-      alert("blog creation error");
-    }
-  };
   return (
     <div>
       <h4>Create a Blog Post</h4>
-      <form onSubmit={handleOnFormSubmit}>
+      <form onSubmit={handleOnFormSubmit} id="createBlogForm">
         <label htmlFor="title">Title</label>
         <input
           type="text"
