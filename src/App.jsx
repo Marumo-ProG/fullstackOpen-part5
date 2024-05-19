@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import blogService from "./services/blogs";
+import usersService from "./services/users";
 
 // Components
 import CreateBlogForm from "./components/createBlogForm";
@@ -19,6 +20,17 @@ const App = () => {
       setBlogs(sortedBlogs);
     });
   }, []);
+
+  const fetchUser = async (blog) => {
+    try {
+      if (blog.user) {
+        const author = await usersService.getUser(blog.user);
+        return author;
+      }
+    } catch (error) {
+      alert("Error getting user");
+    }
+  };
 
   const handleLogout = () => {
     // removing the token from the local storage
@@ -75,14 +87,23 @@ const App = () => {
             />
           )}
           <br />
-          <button onClick={() => setShowBlogForm(!showBlogForm)}>
+          <button
+            id="create-blog-button"
+            onClick={() => setShowBlogForm(!showBlogForm)}
+          >
             {showBlogForm ? "cancel" : "create new blog"}
           </button>
 
           <br />
           <u>
             {blogs.map((blog) => (
-              <Blog blog={blog} key={blog.id} loggedUser={user} />
+              <Blog
+                blog={blog}
+                key={blog.id}
+                loggedUser={user}
+                setNotification={setNotification}
+                user={() => fetchUser(blog)}
+              />
             ))}
           </u>
         </>
